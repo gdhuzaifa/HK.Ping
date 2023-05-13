@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HK Ping - Ping Pong Game</title>
+  <style>
+    /* CSS styles for the game canvas */
+    #gameCanvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>HK Ping</h1>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    // JavaScript code for the game logic
+    // Constants
+    const canvas = document.getElementById("gameCanvas");
+    const context = canvas.getContext("2d");
+    const paddleWidth = 10;
+    const paddleHeight = 80;
+    const paddleSpeed = 5;
+    const ballRadius = 5;
+    const ballSpeed = 2;
+
+    // Paddle objects
+    const leftPaddle = {
+      x: 0,
+      y: canvas.height / 2 - paddleHeight / 2,
+      width: paddleWidth,
+      height: paddleHeight,
+      dy: 0
+    };
+
+    const rightPaddle = {
+      x: canvas.width - paddleWidth,
+      y: canvas.height / 2 - paddleHeight / 2,
+      width: paddleWidth,
+      height: paddleHeight,
+      dy: 0
+    };
+
+    // Ball object
+    const ball = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      dx: ballSpeed,
+      dy: ballSpeed
+    };
+
+    // Keyboard event listeners
+    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener("keyup", keyUpHandler);
+
+    function keyDownHandler(event) {
+      if (event.key === "ArrowUp") {
+        rightPaddle.dy = -paddleSpeed;
+      } else if (event.key === "ArrowDown") {
+        rightPaddle.dy = paddleSpeed;
+      }
+
+      if (event.key === "w") {
+        leftPaddle.dy = -paddleSpeed;
+      } else if (event.key === "s") {
+        leftPaddle.dy = paddleSpeed;
+      }
+    }
+
+    function keyUpHandler(event) {
+      if (
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown"
+      ) {
+        rightPaddle.dy = 0;
+      }
+
+      if (event.key === "w" || event.key === "s") {
+        leftPaddle.dy = 0;
+      }
+    }
+
+    // Update function for game animation
+    function update() {
+      // Clear canvas
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Move paddles
+      leftPaddle.y += leftPaddle.dy;
+      rightPaddle.y += rightPaddle.dy;
+
+      // Restrict paddles within canvas boundaries
+      if (leftPaddle.y < 0) {
+        leftPaddle.y = 0;
+      } else if (leftPaddle.y + leftPaddle.height > canvas.height) {
+        leftPaddle.y = canvas.height - leftPaddle.height;
+      }
+
+      if (rightPaddle.y < 0) {
+        rightPaddle.y = 0;
+      } else if (rightPaddle.y + rightPaddle.height > canvas.height) {
+        rightPaddle.y = canvas.height - rightPaddle.height;
+      }
+
+      // Move ball
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Check collision with paddles
+      if (
+        ball.y + ballRadius > leftPaddle.y &&
+</html>
